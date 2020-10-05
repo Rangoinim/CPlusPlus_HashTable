@@ -1,8 +1,11 @@
 /***********************************************************
 Name: Cory Munselle
-Assignment: 04
-Purpose: Linked list code from assignment03
-Notes: No modifications were made, so it is identical to assignment03
+Assignment: 03
+Purpose: Works with the linked list in various different ways
+Notes: There's a comment above clearList that mentions Diego's help. I was trying to do it
+with just current and I was bashing my head against the wall, so he helped me out and showed me his clearList
+method. It was easier than just working with current, so I stopped being stubborn and tried it. I wanted to
+make sure that he gets credit! If this is an issue, let me know and I can fix it.
 ***********************************************************/
 
 #include "linkedlist.h"
@@ -31,10 +34,12 @@ bool LinkedList::addNode(int id, string str)
     if (head == NULL)
     {
         head = temp;
+		success = true;
     }
     else if (current->data.id > id && id != -1)
     {
         addHead(temp);
+		success = true;
     }
     else if (current->data.id < id && isDuplicate(id) == false)
     {
@@ -44,18 +49,16 @@ bool LinkedList::addNode(int id, string str)
             if (current->data.id > id && current->back->data.id != id)
             {
                 addMiddle(current, temp);
+				success = true;
             }
         }
         if (current->data.id < id)
         {
             addTail(current, temp);
+			success = true;
         }
     }
-    else
-    {
-        return false;
-    }        
-    return true;
+    return success;
 }
 
 bool LinkedList::deleteNode(int id)
@@ -91,17 +94,15 @@ bool LinkedList::deleteNode(int id)
 
 bool LinkedList::getNode(int id, Data* tempData)
 {
+	bool success = false;
     Node *current = head;
     if (findId(id, &current) == true)
     {
         tempData->id = current->data.id;
         tempData->data = current->data.data;
-        return true;
+        success = true;
     }
-    else
-    {
-        return false;
-    }
+	return success;
 }
 
 void LinkedList::printList(bool direction)
@@ -168,15 +169,13 @@ bool LinkedList::clearList()
 
 bool LinkedList::idExists(int id)
 {
+	bool success = false;
     Node *current = head;
     if (findId(id, &current) == true)
     {
-        return true;
+        success = true;
     }
-    else
-    {
-        return false;
-    }    
+	return success;
 }
 
 //private member functions
@@ -223,16 +222,17 @@ void LinkedList::delTail(Node *current)
 
 bool LinkedList::isDuplicate(int id)
 {
+	bool success = false;
     Node *current = head;
     while (current->forward != NULL)
     {
         if (current->forward->data.id == id)
         {
-            return true;
+            success = true;
         }
         current = current->forward;
     }
-    return false;
+    return success;
 }
 
 bool LinkedList::findId(int id, Node **current)
